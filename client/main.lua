@@ -1,7 +1,7 @@
 local CurrentResourceName = GetCurrentResourceName()
 local QBCore, ESX, PlayerLoaded, PlayerData
 local Config, Types, Bones, Players, Entities, Models, Zones, Functions = Config, Types, Bones, {}, {}, {}, {}, {}
-local playerPed, curFlag, targetActive, hasFocus, success, PedsReady, AllowTarget, sendData = PlayerPedId(), 30, false, false, false, false, true, nil
+local playerPed, curFlag, targetActive, hasFocus, success, PedsReady, AllowTarget, sendData, isLoggedIn = PlayerPedId(), 30, false, false, false, false, true, nil, false
 
 if Config.Framework == 'QBCore' then
 	QBCore = exports['qb-core']:GetCoreObject()
@@ -10,11 +10,13 @@ if Config.Framework == 'QBCore' then
 	-- This makes sure that peds only spawn when you are spawned and your PlayerData gets set when you have access to the target
 	RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
 		PlayerData = QBCore.Functions.GetPlayerData()
+		isLoggedIn = true
 		Functions.SpawnPeds()
 	end)
 
 	-- This will make sure everything resets and despawns after you logout/disconnect
 	RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+		isLoggedIn = false
 		PlayerData = {}
 		Functions.DeletePeds()
 	end)
@@ -495,7 +497,7 @@ function Functions.switch()
 end
 
 function Functions.EnableTarget()
-	if not AllowTarget or success or (Config.Framework == 'QBCore' and not LocalPlayer.state['isLoggedIn']) or (Config.Framework == 'ESX' and not PlayerLoaded) then return end
+	if not AllowTarget or success or (Config.Framework == 'QBCore' and not isLoggedIn) or (Config.Framework == 'ESX' and not PlayerLoaded) then return end
 	if not targetActive then
 		targetActive = true
 		SendNUIMessage({response = "openTarget"})
@@ -1267,6 +1269,12 @@ end)
 -- This is to make sure the peds spawn on restart too instead of only when you load/log-in.
 AddEventHandler('onResourceStart', function(resource)
 	if resource == CurrentResourceName then
+		if Config.Framework == 'QBCore' then
+			isLoggedIn = true
+		elseif Config.Framework == 'ESX' then
+			PlayerLoaded = true
+		end
+		
 		Functions.SpawnPeds()
 	end
 end)
