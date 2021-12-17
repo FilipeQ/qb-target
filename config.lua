@@ -21,7 +21,7 @@ Config.Debug = false
 Config.EnableOutline = false
 
 -- Enable default options (Toggling vehicle doors)
-Config.EnableDefaultOptions = false
+Config.EnableDefaultOptions = true
 
 -- Key to open the target
 Config.OpenKey = 'LMENU' -- Left Alt
@@ -108,6 +108,9 @@ if Config.EnableDefaultOptions then
 			icon = "fas fa-door-open",
 			label = "Toggle Front Door",
 			canInteract = function(entity)
+				if GetVehicleDoorLockStatus(entity) == 2 then
+					return false
+				end
 				return GetEntityBoneIndexByName(entity, 'door_dside_f') ~= -1
 			end,
 			action = function(entity)
@@ -122,6 +125,9 @@ if Config.EnableDefaultOptions then
 			icon = "fas fa-door-open",
 			label = "Toggle Front Door",
 			canInteract = function(entity)
+				if GetVehicleDoorLockStatus(entity) == 2 then
+					return false
+				end
 				return GetEntityBoneIndexByName(entity, 'door_pside_f') ~= -1
 			end,
 			action = function(entity)
@@ -136,6 +142,9 @@ if Config.EnableDefaultOptions then
 			icon = "fas fa-door-open",
 			label = "Toggle Rear Door",
 			canInteract = function(entity)
+				if GetVehicleDoorLockStatus(entity) == 2 then
+					return false
+				end
 				return GetEntityBoneIndexByName(entity, 'door_dside_r') ~= -1
 			end,
 			action = function(entity)
@@ -150,6 +159,9 @@ if Config.EnableDefaultOptions then
 			icon = "fas fa-door-open",
 			label = "Toggle Rear Door",
 			canInteract = function(entity)
+				if GetVehicleDoorLockStatus(entity) == 2 then
+					return false
+				end
 				return GetEntityBoneIndexByName(entity, 'door_pside_r') ~= -1
 			end,
 			action = function(entity)
@@ -163,8 +175,31 @@ if Config.EnableDefaultOptions then
 		["Toggle Hood"] = {
 			icon = "fa-duotone fa-engine",
 			label = "Toggle Hood",
+			canInteract = function(entity)
+				if GetVehicleDoorLockStatus(entity) == 2 then
+					return false
+				end
+				return true
+			end,
 			action = function(entity)
 				Config.ToggleDoor(entity, 4)
+			end,
+			distance = 0.9
+		}
+	}
+
+	Bones['boot'] = {
+		["Toggle Truck"] = {
+			icon = "fas fa-door-open",
+			label = "Toggle Truck",
+			canInteract = function(entity)
+				if GetVehicleDoorLockStatus(entity) == 2 then
+					return false
+				end
+				return true
+			end,
+			action = function(entity)
+				Config.ToggleDoor(entity, 5)
 			end,
 			distance = 0.9
 		}
