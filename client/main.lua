@@ -414,8 +414,8 @@ function Functions.GetZoneData(name)
 	return Zones[name]
 end
 
-function Functions.GetTargetBoneData(bone, label)
-	return Bones[bone][label]
+function Functions.GetTargetBoneData(bone)
+	return Bones[bone]
 end
 
 function Functions.GetTargetEntityData(entity, label)
@@ -1038,6 +1038,8 @@ exports("RemoveZone", Functions.RemoveZone)
 exports("RemoveTargetModel", Functions.RemoveTargetModel)
 
 exports("RemoveTargetEntity", Functions.RemoveTargetEntity)
+
+exports("RemoveTargetBone", Functions.RemoveTargetBone)
 
 exports("AddGlobalType", Functions.AddGlobalType)
 
