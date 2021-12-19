@@ -10,6 +10,8 @@ Config.VehicleBones = {'chassis', 'chassis_lowlod', 'chassis_dummy', 'seat_dside
 
 -- The current used framework dependant on your server
 Config.Framework = 'QBCore' -- Can be 'none', 'QBCore' or 'ESX'
+Config.MainCoreEvent = 'QBCore:GetObject' --ESX = 'esx:getSharedObject' , QB = QBCore:GetObject
+Config.CoreResourceName = 'qb-core' --es_extended 
 
 -- It's possible to interact with entities through walls so this should be low
 Config.MaxDistance = 3.0

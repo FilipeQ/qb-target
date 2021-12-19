@@ -4,8 +4,16 @@ local Config, Types, Bones, Players, Entities, Models, Zones, Functions = Config
 local playerPed, curFlag, targetActive, hasFocus, success, PedsReady, AllowTarget, sendData, isLoggedIn = PlayerPedId(), 30, false, false, false, false, true, nil, false
 
 if Config.Framework == 'QBCore' then
-	QBCore = exports['qb-core']:GetCoreObject()
-	PlayerData = QBCore.Functions.GetPlayerData()
+	Citizen.CreateThread(function()
+		while QBCore == nil do
+			TriggerEvent(Config.MainCoreEvent, function(obj) QBCore = obj end)
+			if QBCore == nil then
+				QBCore = exports[Config.CoreResourceName]:GetCoreObject()
+			end
+			Citizen.Wait(100)
+		end
+		PlayerData = QBCore.Functions.GetPlayerData()
+	end)
 
 	-- This makes sure that peds only spawn when you are spawned and your PlayerData gets set when you have access to the target
 	RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
@@ -55,8 +63,18 @@ if Config.Framework == 'QBCore' then
 		return 0
 	end
 elseif Config.Framework == 'ESX' then
-	ESX = exports['es_extended']:getSharedObject()
-	PlayerData = ESX.GetPlayerData()
+	
+	Citizen.CreateThread(function()
+		while ESX == nil do
+			TriggerEvent(ConfigMoneyLaudering.MainCoreEvent, function(obj) ESX = obj end)
+			if ESX == nil then
+				ESX = exports[Config.CoreResourceName]:getSharedObject()
+			end
+			Citizen.Wait(100)
+		end
+		PlayerData = ESX.GetPlayerData()
+	end)
+	
 
 	-- This makes sure that peds only spawn when you are spawned and your PlayerData gets set when you have access to the target
 	RegisterNetEvent('esx:playerLoaded', function(xPlayer)
