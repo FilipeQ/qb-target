@@ -190,7 +190,7 @@ function Functions.AddTargetEntity(entities, parameters)
 	local distance, options = parameters.distance or Config.MaxDistance, parameters.options
 	if type(entities) == 'table' then
 		for _, entity in pairs(entities) do
-			entity = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity) or false
+			entity = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity) or entity
 			if entity then
 				if not Entities[entity] then Entities[entity] = {} end
 				for k, v in pairs(options) do
@@ -200,7 +200,7 @@ function Functions.AddTargetEntity(entities, parameters)
 			end
 		end
 	elseif type(entities) == 'number' then
-		local entity = NetworkGetEntityIsNetworked(entities) and NetworkGetNetworkIdFromEntity(entities) or false
+		local entity = NetworkGetEntityIsNetworked(entities) and NetworkGetNetworkIdFromEntity(entities) or entities
 		if entity then
 			if not Entities[entity] then Entities[entity] = {} end
 			for k, v in pairs(options) do
@@ -311,7 +311,7 @@ end
 function Functions.RemoveTargetEntity(entities, labels)
 	if type(entities) == 'table' then
 		for _, entity in pairs(entities) do
-			entity = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity) or false
+			entity = NetworkGetEntityIsNetworked(entity) and NetworkGetNetworkIdFromEntity(entity) or entity
 			if entity then
 				if type(labels) == 'table' then
 					for k, v in pairs(labels) do
@@ -327,7 +327,7 @@ function Functions.RemoveTargetEntity(entities, labels)
 			end
 		end
 	elseif type(entities) == 'string' then
-		local entity = NetworkGetEntityIsNetworked(entities) and NetworkGetNetworkIdFromEntity(entities) or false
+		local entity = NetworkGetEntityIsNetworked(entities) and NetworkGetNetworkIdFromEntity(entities) or entities
 		if entity then
 			if type(labels) == 'table' then
 				for k, v in pairs(labels) do
@@ -552,6 +552,11 @@ function Functions.EnableTarget()
 				-- Owned entity targets
 				if NetworkGetEntityIsNetworked(entity) then
 					local data = Entities[NetworkGetNetworkIdFromEntity(entity)]
+					if data ~= nil then
+						Functions.CheckEntity(hit, data, entity, #(plyCoords - coords))
+					end
+				else
+					local data = Entities[entity]
 					if data ~= nil then
 						Functions.CheckEntity(hit, data, entity, #(plyCoords - coords))
 					end
