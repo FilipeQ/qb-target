@@ -40,7 +40,7 @@ if Config.Framework == 'QBCore' then
 	end)
 
 	-- This will make sure all the PlayerData stays updated
-	RegisterNetEvent('QBCore:Client:SetPlayerData', function(val)
+	RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
 		PlayerData = val
 	end)
 
