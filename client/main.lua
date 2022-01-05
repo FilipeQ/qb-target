@@ -100,6 +100,24 @@ elseif Config.Framework == 'ESX' then
 		PlayerData[key] = val
 	end)
 
+	RegisterNetEvent('esx:addInventoryItem', function(item, count)
+		for i=1, #PlayerData.inventory, 1 do
+			if PlayerData.inventory[i].name == item.name then
+				PlayerData.inventory[i] = item
+				break
+			end
+		end
+	end)
+
+	RegisterNetEvent('esx:removeInventoryItem', function(item, count)
+		for i=1, #PlayerData.inventory, 1 do
+			if PlayerData.inventory[i].name == item.name then
+				PlayerData.inventory[i] = item
+				break
+			end
+		end
+	end)
+	
 	function Functions.CheckOptions(data, entity, distance)
 		if (not data.distance or distance <= data.distance)
 		and (not data.job or data.job == PlayerData.job.name or (data.job[PlayerData.job.name] and data.job[PlayerData.job.name] <= PlayerData.job.grade))
