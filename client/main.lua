@@ -66,7 +66,7 @@ elseif Config.Framework == 'ESX' then
 	
 	Citizen.CreateThread(function()
 		while ESX == nil do
-			TriggerEvent(ConfigMoneyLaudering.MainCoreEvent, function(obj) ESX = obj end)
+			TriggerEvent(Config.MainCoreEvent, function(obj) ESX = obj end)
 			if ESX == nil then
 				ESX = exports[Config.CoreResourceName]:getSharedObject()
 			end
