@@ -1,5 +1,5 @@
 local CurrentResourceName = GetCurrentResourceName()
-local QBCore, ESX, PlayerLoaded, PlayerData
+local QBCore, ESX, PlayerLoaded, PlayerData, QS
 local Config, Types, Bones, Players, Entities, Models, Zones, Functions = Config, Types, Bones, {}, {}, {}, {}, {}
 local playerPed, curFlag, targetActive, hasFocus, success, PedsReady, AllowTarget, sendData, isLoggedIn = PlayerPedId(), 30, false, false, false, false, true, nil, false
 
@@ -73,6 +73,8 @@ elseif Config.Framework == 'ESX' then
 			Citizen.Wait(100)
 		end
 		PlayerData = ESX.GetPlayerData()
+
+		TriggerEvent('qs-core:getSharedObject', function(obj) QS = obj end)
 	end)
 	
 
@@ -128,12 +130,32 @@ elseif Config.Framework == 'ESX' then
 	end
 
 	function Functions.ItemCount(item)
-		for k, v in pairs(PlayerData.inventory) do
-			if v.name == item then
-				return v.count
+		if QS then
+			local hasItem = false
+			local executed = false
+			ESX.TriggerServerCallback('qs-core:hasItem', function(result)
+				hasItem = result
+				executed = true
+			end,item)
+
+			while executed == false do
+				Citizen.Wait(100)
 			end
+			
+			if hasItem then
+				return 1
+			else
+				return 0
+			end
+		else
+			for k, v in pairs(PlayerData.inventory) do
+				if v.name == item then
+					return v.count
+				end
+			end
+			return 0
 		end
-		return 0
+		
 	end
 elseif Config.Framework == 'none' then
 	local firstSpawn = false
